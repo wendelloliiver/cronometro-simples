@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cronômetro dos grande</title>
+
+  <style>
+    body {
+      background-color: black;
+      display: flex;
+      align-items: center;
+      margin: 64px;
+      flex-direction: column;
+    }
+
+    .iniciar {
+      background-color: #ff4791;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 4px 12px;
+      font-size: 16px;
+    }
+
+    .resetar {
+      background-color: #f8a0c3;
+      color: rgb(0, 0, 0);
+    }
+
+    button:hover {
+      background-color: #d47299;
+      cursor: pointer;
+    }
+
+    h1 {
+      font-size: 64px;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="box">
+    <input type="date" name="cronometro" id="cronometro" value="2023-01-01">
+    <button class="iniciar" onclick="iniciar()">Iniciar</button>
+    <button class="iniciar resetar" onclick="resetar()">Resetar</button>  
+  </div>
+
+  <h1>🤖</h1>
+
+  <script>
+    const segundo = 1000
+    const minuto = 60 * segundo
+    const hora = 60 * minuto
+    const dia = 24 * hora
+    
+    let total
+    let data_final
+    let id_intervalo
+
+    if (localStorage.getItem("timer")) {
+      data_final = localStorage.getItem("timer")
+      id_intervalo = setInterval(timer, 1000)
+    }
+
+    function iniciar() {
+      const data = document.querySelector("input").value
+      data_final = new Date(data).getTime()
+      localStorage.setItem("timer", data_final)
+
+
+      id_intervalo = setInterval(timer, 1000)
+    }
+    
+    function timer() {
+      let agora = new Date().getTime()
+      total = data_final - agora
+      
+      const dias = Math.floor(total / dia)
+      const horas = Math.floor((total % dia) / hora) + 3
+      const minutos = Math.floor((total % hora) / minuto)
+      const segundos = Math.floor((total % minuto) / segundo)
+
+      document.querySelector("h1").innerHTML = `${dias} d ${horas} h ${minutos} m ${segundos} s`
+    }
+
+    function resetar() {
+      document.querySelector("h1").innerText = "🤖"
+      clearInterval(id_intervalo)
+      localStorage.removeItem("timer")
+    }
+  </script> 
+</body>
+
+</html>
